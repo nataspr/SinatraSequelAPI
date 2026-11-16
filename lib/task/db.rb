@@ -80,4 +80,23 @@ namespace :db do
     Sequel::Migrator.run(db, migrations_directory)                # накат до latest
     Rake::Task['db:version'].execute                              # печать
   end
+
+  # для работы с SEED
+  desc 'Load seed data from ./seeds'
+  task :seed do
+    require 'sequel/extensions/seed'
+    # Очистить schema_seeds, чтобы сиды применились повторно
+    # sequel-seed создаёт эту таблицу при первом запуске и пишет туда имена применённых файлов
+    if db.tables.include?(:schema_seeds)
+      db[:schema_seeds].delete #необходимо очищать содержание средствами IDE перед каждым запуском
+      puts 'schema_seeds cleared'
+    end
+
+    Sequel::Seed.setup(ENV['RACK_ENV'] || :development)
+
+    Sequel.extension :seed
+    # Применить все файлы из seeds
+    Sequel::Seeder.apply(db, './seeds')
+    puts 'Seeds applied'
+  end
 end
