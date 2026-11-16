@@ -5,6 +5,20 @@ require 'pg'
 require 'json'
 require 'multi_json'
 require 'sinatra'
+require 'sinatra/namespace'
+
+# Подключение к БД
+require_relative 'config/database'
+
+# Единый Content-Type для всех ответов Postman
+before do
+  content_type 'application/json'
+end
+
+# Хелпер для массива моделей: вызывает to_api у каждой и пакует в JSON
+def collection_to_api(collection)
+  MultiJson.dump(collection.map { |s| s.to_api })
+end
 
 # Корневой маршрут
 get '/' do

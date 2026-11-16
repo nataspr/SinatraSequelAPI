@@ -21,8 +21,8 @@ namespace :db do
   puts "ENV['DATABASE'] = #{ENV['DATABASE'].inspect}"
   puts "connection_string = #{connection_string.inspect}"
 
-  db = Sequel.connect(connection_string)
-
+  DB = Sequel.connect(connection_string)
+  db=DB
   # db:version — текущая версия схемы
   desc 'Prints current schema version'
   task :version do
