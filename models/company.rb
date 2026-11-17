@@ -5,9 +5,9 @@ class Company < Sequel::Model
     {
       id: id,
       name: name,
-      location: location,
-      created_at: created_at,
-      updated_at: updated_at
+      location: location
+      # created_at: created_at,
+      # updated_at: updated_at
     }
   end
 end

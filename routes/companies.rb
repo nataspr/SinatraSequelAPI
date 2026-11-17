@@ -16,4 +16,33 @@ namespace '/api/v1' do
       { error: 'Company not found' }.to_json
     end
   end
+    # POST /api/v1/companies — создание новой компании
+  post '/companies' do
+    begin
+      # JSON из тела запроса
+      data = MultiJson.load(request.body.read)
+      
+      company = Company.create(
+        name: data['name'],
+        location: data['location']
+      )
+      status 201
+      company.to_api.to_json
+    rescue => e
+      status 400
+      { error: 'Invalid data', details: e.message }.to_json
+    end
+  end
+
+    # GET /api/v1/companies/:id/jobs — все вакансии конкретной компании
+  get '/companies/:id/jobs' do
+    company = Company[params[:id].to_i]
+    if company
+      collection_to_api(company.jobs)
+    else
+      status 404
+      { error: 'Company not found' }.to_json
+    end
+  end
+
 end

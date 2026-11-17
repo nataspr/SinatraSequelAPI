@@ -9,9 +9,9 @@ class Job < Sequel::Model
       id: id,
       name: name,
       place: place,
-      company_id: company_id,
-      created_at: created_at,
-      updated_at: updated_at
+      company_id: company_id
+      # created_at: created_at,
+      # updated_at: updated_at
     }
   end
 end
