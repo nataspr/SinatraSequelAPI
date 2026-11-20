@@ -27,4 +27,4 @@ get '/' do
 end
 
 # Автозагрузка всех .rb-файлов из каталогов
-%w{ controllers models routes }.each { |dir| Dir.glob("./#{dir}/*.rb", &method(:require)) }
+%w{ models controllers routes }.each { |dir| Dir.glob("./#{dir}/*.rb").sort.each { |file| require file } }
