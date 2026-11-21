@@ -4,6 +4,22 @@ class Job < Sequel::Model
   many_to_one :company
   one_to_many :applies
 
+    dataset_module do
+    def by_place(place)
+      return self if place.nil? || place.empty?
+      where(place: /#{place}/i)
+    end
+
+    def by_name(name)
+      return self if name.nil? || name.empty?
+      where(name: /#{name}/i)
+    end
+  end
+
+  def self.company_jobs(company_id)
+    where(company_id: company_id)
+  end
+
   def to_api
     {
       id: id,

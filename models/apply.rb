@@ -2,6 +2,15 @@ class Apply < Sequel::Model
   many_to_one :job
   many_to_one :geek
 
+  def self.read
+    where(read: true)
+  end
+
+  def self.unread
+    where(read: false)
+  end
+
+
   def to_api
     {
       id: id,

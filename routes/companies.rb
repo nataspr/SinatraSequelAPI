@@ -1,7 +1,12 @@
 namespace '/api/v1' do
   # GET /api/v1/companies — список всех компаний
   get '/companies' do
-    collection_to_api(Company.all)
+    #collection_to_api(Company.all)
+    ds = Company.dataset
+
+    ds = ds.by_name(params['name'])if params['name']
+    ds = ds.by_location(params['location']) if params['location']
+    collection_to_api(ds.all)
   end
 
   # GET /api/v1/companies/:id — одна компания
@@ -31,6 +36,18 @@ namespace '/api/v1' do
     rescue => e
       status 400
       { error: 'Invalid data', details: e.message }.to_json
+    end
+  end
+# GET /api/v1/company_jobs?name=Mo — все вакансии компании по её имени
+  get '/company_jobs' do
+    name = params[:name]
+    jobs = Company.company_jobs(name)
+
+    if jobs.empty?
+      status 404
+      { message: 'Company not found or no jobs', status: 404, name: name }.to_json
+    else
+      collection_to_api(jobs.all)
     end
   end
 
