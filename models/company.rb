@@ -10,15 +10,15 @@ class Company < Sequel::Model
       # updated_at: updated_at
     }
   end
-
+  dataset_module do
   # Возвращает dataset (не массив), можно продолжать цепочку
-  def self.by_name(name)
-    return where if name.nil? || name.empty? # если name пустой это вернёт все записи, а не пусто
-    where(name: /#{name}/i)   # regex case-insensitive: name ~* 'Mo'
-  end
+    def by_name(name)
+      return where if name.nil? || name.empty? # если name пустой это вернёт все записи, а не пусто
+      where(name: /#{name}/i)   # regex case-insensitive: name ~* 'Mo'
+    end
 
   # Такой метод доступен не только как Company.by_location, но и в цепочке Company.where(...).by_location(...)
-  dataset_module do
+    # Частичное совпадение по локации
     def by_location(location)
       return self if location.nil? || location.empty?
       where(location: /#{location}/i)

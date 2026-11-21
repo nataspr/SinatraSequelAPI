@@ -1,7 +1,19 @@
 namespace '/api/v1' do
   # GET /api/v1/jobs — список всех вакансий
+  # get '/jobs' do
+  #   collection_to_api(Job.all)
+  # end
+  # GET /api/v1/jobs — все
+  # GET /api/v1/jobs?place=Remo — по place (частичное, case-insensitive)
+  # GET /api/v1/jobs?name=Ruby — по name
+  # GET /api/v1/jobs?place=Remo&name=Sinatra — оба (AND)
   get '/jobs' do
-    collection_to_api(Job.all)
+    ds = Job.dataset
+
+    ds = ds.by_place(params['place']) if params['place']
+    ds = ds.by_name(params['name'])   if params['name']
+
+    collection_to_api(ds.all)
   end
 
   # GET /api/v1/jobs/:id — одна вакансия или 404

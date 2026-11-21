@@ -4,7 +4,7 @@ class Job < Sequel::Model
   many_to_one :company
   one_to_many :applies
 
-    dataset_module do
+  dataset_module do
     def by_place(place)
       return self if place.nil? || place.empty?
       where(place: /#{place}/i)
